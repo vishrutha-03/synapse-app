@@ -8,7 +8,7 @@ type Props = {
 
 export default function DeckCard({ title, cards }: Props) {
   return (
-    <View style={GlobalStyles.cardFlat}>
+    <View style={GlobalStyles.cardAlt}>
       <Text style={GlobalStyles.heading3}>{title}</Text>
       <Text style={GlobalStyles.bodySmall}>{cards} cards</Text>
     </View>

@@ -10,7 +10,7 @@ export default function FlashcardQuiz() {
       <Text style={GlobalStyles.heading3}>🃏 Flashcard Quiz</Text>
 
       <Pressable
-        style={[GlobalStyles.cardFlat, { marginTop: 12 }]}
+        style={[GlobalStyles.cardAlt, { marginTop: 12 }]}
         onPress={() => setFlipped(!flipped)}
       >
         <Text style={GlobalStyles.body}>

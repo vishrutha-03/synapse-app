@@ -2,129 +2,127 @@ import { StyleSheet, ViewStyle, TextStyle } from "react-native";
 
 /**
  * Synapse — Global Design System
- * Aesthetic: Warm Cottagecore
+ * Aesthetic: Neubrutalist
+ *
+ * Bold, high-contrast, sharp edges, thick borders, hard shadows.
  */
 
 export const Colors = {
-  cream: "#FDF5E6",
-  creamDeep: "#F5E6C8",
-  creamDark: "#EDD9A3",
+  // Background + surfaces
+  bg: "#F8F8F8",
+  surface: "#FFFFFF",
+  surfaceAlt: "#F2F2F2",
 
-  sage: "#87A96B",
-  sageDark: "#6A8A52",
-  sageLight: "#B8CFA2",
-  sageMist: "#E8F0E1",
+  // Borders + text
+  border: "#111111",
+  text: "#111111",
+  textMuted: "#444444",
+  textGhost: "#777777",
 
-  clay: "#B36751",
-  clayDark: "#8F4F3C",
-  clayLight: "#D4A090",
-  clayMist: "#F5EAE7",
+  // Accent colors (neon-ish but controlled)
+  primary: "#00E0A4", // mint neon
+  primaryDark: "#00A87C",
+  secondary: "#FF4D6D", // hot pink-red
+  secondaryDark: "#C8304A",
 
-  inkDark: "#3B2F2F",
-  inkMid: "#6B5555",
-  inkLight: "#A08080",
-  inkGhost: "#C8B4B4",
+  yellow: "#FFD60A",
+  blue: "#4D96FF",
+  purple: "#8A4FFF",
 
-  success: "#87A96B",
-  warning: "#D4A900",
-  error: "#B36751",
-  info: "#7B9EA8",
+  // Semantic
+  success: "#00E0A4",
+  warning: "#FFD60A",
+  error: "#FF4D6D",
+  info: "#4D96FF",
 
+  // Absolute
   white: "#FFFFFF",
-  black: "#1A1010",
+  black: "#111111",
   transparent: "transparent",
 };
 
 export const Typography = {
-  fontSerif: "Lora-Regular",
-  fontSerifSemiBold: "Lora-SemiBold",
-  fontSerifItalic: "Lora-Italic",
+  // Neubrutalism looks best with strong sans fonts
+  fontDisplay: "ArchivoBlack-Regular",
+  fontBody: "Lexend-Medium",
+  fontBold: "Lexend-Bold",
 
-  fontSans: "Nunito-Regular",
-  fontSansMedium: "Nunito-Medium",
-  fontSansSemiBold: "Nunito-SemiBold",
 
   size: {
     xs: 11,
     sm: 13,
     base: 15,
-    md: 17,
-    lg: 20,
-    xl: 24,
-    "2xl": 30,
-    "3xl": 38,
-    display: 48,
+    md: 18,
+    lg: 22,
+    xl: 28,
+    "2xl": 34,
+    "3xl": 42,
+    display: 56,
   },
 
   leading: {
-    tight: 1.2,
-    snug: 1.4,
-    normal: 1.6,
-    relaxed: 1.8,
+    tight: 1.15,
+    snug: 1.3,
+    normal: 1.5,
+    relaxed: 1.7,
   },
 
   tracking: {
-    tight: -0.5,
+    tight: -0.8,
     normal: 0,
-    wide: 0.5,
-    wider: 1,
+    wide: 0.8,
+    wider: 1.4,
     caps: 2,
   },
 };
 
 export const Spacing = {
-  xxs: 2,
-  xs: 4,
-  sm: 8,
-  md: 12,
-  base: 16,
-  lg: 20,
-  xl: 24,
-  "2xl": 32,
-  "3xl": 40,
-  "4xl": 56,
-  "5xl": 72,
-  section: 96,
+  xxs: 4,
+  xs: 6,
+  sm: 10,
+  md: 14,
+  base: 18,
+  lg: 24,
+  xl: 32,
+  "2xl": 40,
+  "3xl": 56,
+  "4xl": 72,
+  "5xl": 96,
+  section: 120,
 };
 
 export const Radii = {
-  sm: 12,
-  md: 20,
-  lg: 28,
-  xl: 36,
-  "2xl": 48,
+  sm: 6,
+  md: 10,
+  lg: 14,
+  xl: 18,
+  "2xl": 24,
   pill: 9999,
   circle: 9999,
 };
 
+// Hard brutal shadows
 export const Shadows = {
-  xs: {
-    shadowColor: Colors.clay,
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.06,
-    shadowRadius: 4,
-    elevation: 1,
+  hardSm: {
+    shadowColor: Colors.black,
+    shadowOffset: { width: 3, height: 3 },
+    shadowOpacity: 1,
+    shadowRadius: 0,
+    elevation: 6,
   },
-  sm: {
-    shadowColor: Colors.inkDark,
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.07,
-    shadowRadius: 8,
-    elevation: 2,
+  hardMd: {
+    shadowColor: Colors.black,
+    shadowOffset: { width: 5, height: 5 },
+    shadowOpacity: 1,
+    shadowRadius: 0,
+    elevation: 10,
   },
-  md: {
-    shadowColor: Colors.inkDark,
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.09,
-    shadowRadius: 16,
-    elevation: 4,
-  },
-  lg: {
-    shadowColor: Colors.clay,
-    shadowOffset: { width: 0, height: 8 },
-    shadowOpacity: 0.12,
-    shadowRadius: 24,
-    elevation: 8,
+  hardLg: {
+    shadowColor: Colors.black,
+    shadowOffset: { width: 8, height: 8 },
+    shadowOpacity: 1,
+    shadowRadius: 0,
+    elevation: 16,
   },
 };
 
@@ -133,8 +131,7 @@ type GlobalStyleSheet = {
   scrollContent: ViewStyle;
 
   card: ViewStyle;
-  cardFlat: ViewStyle;
-  cardAccent: ViewStyle;
+  cardAlt: ViewStyle;
 
   heading1: TextStyle;
   heading2: TextStyle;
@@ -156,115 +153,149 @@ type GlobalStyleSheet = {
 export const GlobalStyles = StyleSheet.create<GlobalStyleSheet>({
   screen: {
     flex: 1,
-    backgroundColor: Colors.cream,
+    backgroundColor: Colors.bg,
   },
+
   scrollContent: {
     paddingHorizontal: Spacing.base,
     paddingBottom: Spacing["4xl"],
-    paddingTop: Spacing.lg,
+    paddingTop: Spacing.xl,
   },
 
+  // Cards = thick border + hard shadow
   card: {
-    backgroundColor: Colors.creamDeep,
-    borderRadius: Radii.lg,
+    backgroundColor: Colors.surface,
+    borderRadius: Radii.md,
     padding: Spacing.base,
-    ...Shadows.md,
     marginTop: Spacing.base,
+
+    // --- THE NEUBRUTALIST ADDITIONS ---
+    borderColor: Colors.black, // Ensure this is pure black
+    borderWidth: 3,            // The main "outline" thickness
+
+    // These two lines create the "Hard Shadow" look on Android & iOS
+    borderRightWidth: 6,
+    borderBottomWidth: 6,
   },
-  cardFlat: {
-    backgroundColor: Colors.creamDeep,
-    borderRadius: Radii.lg,
+
+  cardAlt: {
+    backgroundColor: Colors.surface,
+    borderRadius: Radii.md,
     padding: Spacing.base,
-    borderWidth: 1,
-    borderColor: Colors.creamDark,
     marginTop: Spacing.base,
-  },
-  cardAccent: {
-    backgroundColor: Colors.sageMist,
-    borderRadius: Radii.lg,
-    padding: Spacing.base,
-    borderWidth: 1,
-    borderColor: Colors.sage + "40",
-    ...Shadows.sm,
-    marginTop: Spacing.base,
+
+    // --- THE NEUBRUTALIST ADDITIONS ---
+    borderColor: Colors.black, // Ensure this is pure black
+    borderWidth: 3,            // The main "outline" thickness
+
+    // These two lines create the "Hard Shadow" look on Android & iOS
+    borderRightWidth: 6,
+    borderBottomWidth: 6,
   },
 
   heading1: {
-    fontFamily: Typography.fontSerifSemiBold,
+    fontFamily: Typography.fontDisplay,
     fontSize: Typography.size["2xl"],
-    color: Colors.inkDark,
+    fontWeight: "900",
+    color: Colors.text,
+    letterSpacing: Typography.tracking.tight,
   },
+
   heading2: {
-    fontFamily: Typography.fontSerifSemiBold,
+    fontFamily: Typography.fontDisplay,
     fontSize: Typography.size.xl,
-    color: Colors.inkDark,
+    fontWeight: "900",
+    color: Colors.text,
+    letterSpacing: Typography.tracking.tight,
   },
+
   heading3: {
-    fontFamily: Typography.fontSerifSemiBold,
+    fontFamily: Typography.fontDisplay,
     fontSize: Typography.size.lg,
-    color: Colors.inkDark,
+    fontWeight: "800",
+    color: Colors.text,
+    letterSpacing: Typography.tracking.tight,
   },
 
   body: {
-    fontFamily: Typography.fontSans,
+    fontFamily: Typography.fontBody,
     fontSize: Typography.size.base,
-    lineHeight: Typography.size.base * Typography.leading.relaxed,
-    color: Colors.inkMid,
-    marginTop: 6,
-  },
-  bodySmall: {
-    fontFamily: Typography.fontSans,
-    fontSize: Typography.size.sm,
-    color: Colors.inkLight,
-    marginTop: 4,
-  },
-  label: {
-    fontFamily: Typography.fontSansSemiBold,
-    fontSize: Typography.size.sm,
-    color: Colors.inkDark,
-    textTransform: "uppercase",
-    letterSpacing: 1,
+    lineHeight: Typography.size.base * Typography.leading.normal,
+    color: Colors.textMuted,
+    marginTop: Spacing.xs,
   },
 
+  bodySmall: {
+    fontFamily: Typography.fontBody,
+    fontSize: Typography.size.sm,
+    color: Colors.textGhost,
+    marginTop: Spacing.xs,
+  },
+
+  label: {
+    fontFamily: Typography.fontBody,
+    fontSize: Typography.size.sm,
+    fontWeight: "800",
+    color: Colors.text,
+    textTransform: "uppercase",
+    letterSpacing: Typography.tracking.caps,
+    marginBottom: Spacing.xs,
+  },
+
+  // Buttons = thick border + brutal shadow
   btnPrimary: {
-    backgroundColor: Colors.sage,
-    borderRadius: Radii.pill,
+    backgroundColor: Colors.primary,
+    borderRadius: Radii.md,
     paddingVertical: Spacing.md,
     alignItems: "center",
     marginTop: Spacing.base,
-    ...Shadows.sm,
+    borderWidth: 3,
+    borderColor: Colors.border,
+    ...Shadows.hardMd,
   },
+
   btnPrimaryText: {
-    fontFamily: Typography.fontSansSemiBold,
+    fontFamily: Typography.fontBody,
     fontSize: Typography.size.base,
-    color: Colors.white,
+    fontWeight: "900",
+    color: Colors.black,
+    textTransform: "uppercase",
+    letterSpacing: Typography.tracking.wider,
   },
 
   btnSecondary: {
-    borderRadius: Radii.pill,
+    backgroundColor: Colors.surface,
+    borderRadius: Radii.md,
     paddingVertical: Spacing.md,
     alignItems: "center",
     marginTop: Spacing.sm,
-    borderWidth: 1.5,
-    borderColor: Colors.sage,
-  },
-  btnSecondaryText: {
-    fontFamily: Typography.fontSansSemiBold,
-    fontSize: Typography.size.base,
-    color: Colors.sageDark,
+    borderWidth: 3,
+    borderColor: Colors.border,
+    ...Shadows.hardSm,
   },
 
+  btnSecondaryText: {
+    fontFamily: Typography.fontBody,
+    fontSize: Typography.size.base,
+    fontWeight: "900",
+    color: Colors.text,
+    textTransform: "uppercase",
+    letterSpacing: Typography.tracking.wider,
+  },
+
+  // Inputs = boxy + thick border
   input: {
-    backgroundColor: Colors.white,
-    borderRadius: Radii.lg,
+    backgroundColor: Colors.surface,
+    borderRadius: Radii.md,
     paddingHorizontal: Spacing.base,
     paddingVertical: Spacing.md,
-    fontFamily: Typography.fontSans,
+    fontFamily: Typography.fontBody,
     fontSize: Typography.size.base,
-    color: Colors.inkDark,
-    borderWidth: 1.5,
-    borderColor: Colors.creamDark,
+    color: Colors.text,
+    borderWidth: 3,
+    borderColor: Colors.border,
     marginTop: Spacing.base,
+    ...Shadows.hardSm,
   },
 });
 
