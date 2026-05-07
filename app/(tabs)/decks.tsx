@@ -1,10 +1,12 @@
+import { SafeAreaView } from "react-native-safe-area-context";
 import { ScrollView, Text } from "react-native";
 import { GlobalStyles } from "../../theme/theme";
 import DeckCard from "../../components/DeckCard";
 
 export default function Decks() {
   return (
-    <ScrollView style={GlobalStyles.screen} contentContainerStyle={GlobalStyles.scrollContent}>
+    <SafeAreaView style={GlobalStyles.screen}>
+        <ScrollView style={GlobalStyles.screen} contentContainerStyle={GlobalStyles.scrollContent}>
       <Text style={GlobalStyles.heading2}>📚 Deck Library</Text>
       <Text style={GlobalStyles.body}>
         Your saved flashcard decks live here.
@@ -15,5 +17,7 @@ export default function Decks() {
       <DeckCard title="DSA Revision" cards={25} />
       <DeckCard title="Maths Linear Algebra" cards={10} />
     </ScrollView>
+    </SafeAreaView>
+    
   );
 }
