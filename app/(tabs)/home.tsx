@@ -1,3 +1,4 @@
+import { SafeAreaView } from "react-native-safe-area-context";
 import { ScrollView, Text } from "react-native";
 import { GlobalStyles } from "../../theme/theme";
 
@@ -9,6 +10,7 @@ import FlashcardQuiz from "@/components/FlashcardQuiz";
 
 export default function Home() {
   return (
+     <SafeAreaView style={GlobalStyles.screen}>
     <ScrollView style={GlobalStyles.screen} contentContainerStyle={GlobalStyles.scrollContent}>
       <Text style={GlobalStyles.heading1}>Synapse</Text>
       <Text style={GlobalStyles.body}>Your dashboard, warm and alive 🌿</Text>
@@ -26,5 +28,6 @@ export default function Home() {
 
       <FlashcardQuiz />
     </ScrollView>
+    </SafeAreaView>
   );
 }
