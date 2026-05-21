@@ -1,6 +1,7 @@
 import { SafeAreaView } from "react-native-safe-area-context";
 import { ScrollView, Text, View, TouchableOpacity, StyleSheet } from "react-native";
 import { useState } from "react";
+import { router } from "expo-router";
 
 import { Colors, Typography, Spacing, Radii, Shadows } from "../../theme/theme";
 import DeckCard from "../../components/DeckCard";
@@ -10,8 +11,8 @@ const FILTERS = ["All", "Recent", "Favorites", "CS", "Maths"];
 const DECKS = [
   { title: "Operating Systems", cards: 18, color: Colors.yellow, tag: "CS" },
   { title: "DBMS", cards: 12, color: Colors.purple, tag: "CS" },
-  { title: "DSA Revision", cards: 25, color: Colors.secondary, tag: "CS" },
-  { title: "Maths Linear Algebra", cards: 10, color: Colors.primary, tag: "Maths" },
+  { title: "Data Structures", cards: 25, color: Colors.secondary, tag: "CS" },
+  { title: "Computer Networks", cards: 10, color: Colors.primary, tag: "Maths" },
 ];
 
 export default function Decks() {
@@ -78,9 +79,18 @@ export default function Decks() {
         </ScrollView>
 
         {/* Deck List */}
-        {filtered.map((deck, i) => (
-          <DeckCard key={i} title={deck.title} cards={deck.cards} />
-        ))}
+{filtered.map((deck, i) => (
+  <DeckCard
+    key={i}
+    title={deck.title}
+    cards={deck.cards}
+    onPress={() => {
+      if (deck.title === "Operating Systems") {
+        router.push("/decks/operating-systems");
+      }
+    }}
+  />
+))}
       </ScrollView>
     </SafeAreaView>
   );

@@ -1,16 +1,11 @@
-import { View, Text } from "react-native";
-import { GlobalStyles } from "../theme/theme";
+import { GlobalStyles } from "@/theme/theme";
+import { TouchableOpacity, Text, StyleSheet } from "react-native";
 
-type Props = {
-  title: string;
-  cards: number;
-};
-
-export default function DeckCard({ title, cards }: Props) {
+export default function DeckCard({ title, cards, onPress }: any) {
   return (
-    <View style={GlobalStyles.cardAlt}>
-      <Text style={GlobalStyles.heading3}>{title}</Text>
-      <Text style={GlobalStyles.bodySmall}>{cards} cards</Text>
-    </View>
+    <TouchableOpacity style={GlobalStyles.card} onPress={onPress} activeOpacity={0.9}>
+      <Text>{title}</Text>
+      <Text>{cards} cards</Text>
+    </TouchableOpacity>
   );
 }

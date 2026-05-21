@@ -99,6 +99,7 @@ export const Radii = {
   "2xl": 24,
   pill: 9999,
   circle: 9999,
+  flashcard: 20,
 };
 
 // Hard brutal shadows
@@ -124,6 +125,13 @@ export const Shadows = {
     shadowRadius: 0,
     elevation: 16,
   },
+  neubrutalFlashcard: {
+        shadowColor: "#000000",
+        shadowOffset: { width: 5, height: 7 }, // Strong offset to match reference
+        shadowOpacity: 1, // Solid black block
+        shadowRadius: 0, // Hard edge
+        elevation: 12, // Required for Android depth
+    }
 };
 
 type GlobalStyleSheet = {
@@ -208,6 +216,13 @@ export const GlobalStyles = StyleSheet.create<GlobalStyleSheet>({
     color: Colors.text,
     letterSpacing: Typography.tracking.tight,
   },
+
+  flashcardMain: {
+    padding: Spacing.xl, // Give the text room
+    borderWidth: 3,       // Required outline
+    borderColor: "#000000",
+    borderRadius: Radii.flashcard,
+},
 
   heading3: {
     fontFamily: Typography.fontDisplay,

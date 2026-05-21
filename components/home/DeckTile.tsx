@@ -6,14 +6,17 @@ export default function DeckTile({
   cards,
   emoji,
   color,
+  onPress,
 }: {
   title: string;
   cards: number;
   emoji: string;
   color: string;
+  onPress?: () => void;
 }) {
   return (
-    <TouchableOpacity style={[styles.deckCard, { backgroundColor: color }]}>
+    <TouchableOpacity style={[styles.deckCard, { backgroundColor: color }]} onPress={onPress}
+>
       <Text style={styles.deckEmoji}>{emoji}</Text>
 
       <Text style={styles.deckTitle}>{title}</Text>
