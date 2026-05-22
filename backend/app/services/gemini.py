@@ -1,19 +1,18 @@
 from dotenv import load_dotenv
 import os
-import google.generativeai as genai
+from google import genai
 
 load_dotenv(override=True)
 
-print("GEMINI KEY:", os.getenv("GEMINI_API_KEY"))
+api_key = os.getenv("GEMINI_API_KEY")
 
-genai.configure(api_key=os.getenv("GEMINI_API_KEY"))
+print("GEMINI KEY:", api_key)
 
-model = genai.GenerativeModel("gemini-2.0-flash")
+client = genai.Client(api_key=api_key)
 
 
 def generate_summary_and_flashcards(text: str):
 
-    # prevent super huge prompts
     text = text[:5000]
 
     prompt = f"""
@@ -39,7 +38,10 @@ def generate_summary_and_flashcards(text: str):
     """
 
     try:
-        response = model.generate_content(prompt)
+        response = client.models.generate_content(
+            model="gemini-2.5-flash",
+            contents=prompt
+        )
 
         return response.text
 
