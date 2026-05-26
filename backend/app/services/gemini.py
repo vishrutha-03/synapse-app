@@ -92,16 +92,7 @@ from google import genai
 
 load_dotenv(override=True)
 
-<<<<<<< HEAD
-api_key = os.getenv("GEMINI_API_KEY")
-
-print("GEMINI KEY:", api_key)
-
-client = genai.Client(api_key=api_key)
-
-=======
 client = genai.Client(api_key=os.getenv("GEMINI_API_KEY"))
->>>>>>> a1b087f (Finalize migration: dynamic username, PDF upload fix, cleanup)
 
 def generate_summary_and_flashcards(text: str):
 
@@ -131,13 +122,8 @@ def generate_summary_and_flashcards(text: str):
 
     try:
         response = client.models.generate_content(
-<<<<<<< HEAD
-            model="gemini-2.5-flash",
-            contents=prompt
-=======
             model='gemini-2.0-flash',
             contents=prompt,
->>>>>>> a1b087f (Finalize migration: dynamic username, PDF upload fix, cleanup)
         )
 
         return response.text
