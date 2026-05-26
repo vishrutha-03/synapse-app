@@ -3,6 +3,7 @@ import { View, Text, TouchableOpacity, StyleSheet, ScrollView } from "react-nati
 import { router } from "expo-router";
 import { Colors, Typography, Spacing, Radii, Shadows } from "../../theme/theme";
 import { useAuthStore } from "../../store/useAuthStore";
+import { useEffect, useState } from "react";
 
 const ACHIEVEMENTS = [
   { icon: "🔥", label: "7-Day Streak", unlocked: true, color: Colors.secondary },
@@ -13,6 +14,20 @@ const ACHIEVEMENTS = [
 
 export default function Profile() {
   const logout = useAuthStore((s) => s.logout);
+  const token = useAuthStore((s) => s.token);
+  const [userName, setUserName] = useState("User");
+
+  useEffect(() => {
+    if (!token) return;
+    fetch("http://127.0.0.1:8000/me/", {
+      headers: { Authorization: `Bearer ${token}` },
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.username) setUserName(data.username);
+      })
+      .catch(console.error);
+  }, [token]);
 
   return (
     <SafeAreaView style={styles.safe}>
@@ -30,7 +45,7 @@ export default function Profile() {
           </View>
 
           <View style={{ flex: 1 }}>
-            <Text style={styles.userName}>Mahima</Text>
+            <Text style={styles.userName}>{userName}</Text>
             <Text style={styles.userTagline}>Synapse learner since 2024</Text>
 
             <View style={styles.levelPill}>
