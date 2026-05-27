@@ -1,29 +1,55 @@
 import { SafeAreaView } from "react-native-safe-area-context";
-import { ScrollView, Text, View, TouchableOpacity, StyleSheet } from "react-native";
-import { useState } from "react";
+import { ScrollView, Text, View, TouchableOpacity, StyleSheet, ActivityIndicator } from "react-native";
+import { useState, useEffect } from "react";
 import { router } from "expo-router";
 
 import { Colors, Typography, Spacing, Radii, Shadows } from "../../theme/theme";
 import DeckCard from "../../components/DeckCard";
+import { useAuthStore } from "../../store/useAuthStore";
 
-const FILTERS = ["All", "Recent", "Favorites", "CS", "Maths"];
+const FILTERS = ["All", "Recent"];
 
-const DECKS = [
-  { title: "Operating Systems", cards: 18, color: Colors.yellow, tag: "CS" },
-  { title: "DBMS", cards: 12, color: Colors.purple, tag: "CS" },
-  { title: "Data Structures", cards: 25, color: Colors.secondary, tag: "CS" },
-  { title: "Computer Networks", cards: 10, color: Colors.primary, tag: "Maths" },
-];
+type Deck = {
+  id: string;
+  title: string;
+  card_count: number;
+  emoji: string;
+  color: string;
+};
 
 export default function Decks() {
+  const token = useAuthStore((s) => s.token);
   const [activeFilter, setActiveFilter] = useState("All");
+  const [decks, setDecks] = useState<Deck[]>([]);
+  const [loading, setLoading] = useState(true);
 
-  const filtered =
-    activeFilter === "All"
-      ? DECKS
-      : DECKS.filter((d) => d.tag === activeFilter);
+  useEffect(() => {
+    const fetchDecks = async () => {
+      console.log("TOKEN:", token);
+      try {
+        const res = await fetch("http://127.0.0.1:8000/decks/", {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        const data = await res.json();
+        console.log("DECKS RESPONSE:", JSON.stringify(data)); 
+        setDecks(data);
+      } catch (e) {
+        console.error("Failed to fetch decks", e);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchDecks();
+  }, []);
+
+  const totalCards = decks.reduce((sum, d) => sum + d.card_count, 0);
+
+  
 
   return (
+
+    
     <SafeAreaView style={styles.safe}>
       <ScrollView
         contentContainerStyle={styles.container}
@@ -32,20 +58,22 @@ export default function Decks() {
         {/* Header */}
         <View style={styles.header}>
           <Text style={styles.title}>DECKS</Text>
-
-          <TouchableOpacity style={styles.newBtn}>
+          <TouchableOpacity
+            style={styles.newBtn}
+            onPress={() => router.push("/(tabs)/upload")}
+          >
             <Text style={styles.newBtnText}>+ NEW</Text>
           </TouchableOpacity>
         </View>
 
         <Text style={styles.subtitle}>All your flashcard decks in one place.</Text>
 
-        {/* Stats Row */}
+        {/* Stats Row — now dynamic */}
         <View style={styles.statsRow}>
           {[
-            { label: "Total Decks", value: "4", color: Colors.yellow },
-            { label: "Total Cards", value: "65", color: Colors.purple },
-            { label: "Studied Today", value: "2", color: Colors.primary },
+            { label: "Total Decks", value: String(decks.length), color: Colors.yellow },
+            { label: "Total Cards", value: String(totalCards), color: Colors.purple },
+            { label: "Studied Today", value: "0", color: Colors.primary },
           ].map((s, i) => (
             <View key={i} style={[styles.statBox, { backgroundColor: s.color }]}>
               <Text style={styles.statValue}>{s.value}</Text>
@@ -63,7 +91,6 @@ export default function Decks() {
         >
           {FILTERS.map((f) => {
             const active = activeFilter === f;
-
             return (
               <TouchableOpacity
                 key={f}
@@ -79,20 +106,24 @@ export default function Decks() {
         </ScrollView>
 
         {/* Deck List */}
-{filtered.map((deck, i) => (
-  <DeckCard
-    key={i}
-    title={deck.title}
-    cards={deck.cards}
-    onPress={() => {
-      if (deck.title === "Operating Systems") {
-        router.push("/decks/operating-systems");
-      }
-    }}
-  />
-))}
+        {loading ? (
+          <ActivityIndicator color={Colors.primary} style={{ marginTop: 32 }} />
+        ) : decks.length === 0 ? (
+          <Text style={styles.emptyText}>No decks yet. Upload a file to get started!</Text>
+        ) : (
+          decks.map((deck) => (
+            <DeckCard
+              key={deck.id}
+              title={deck.title}
+              cards={deck.card_count}
+              onPress={() => router.push(`/decks/${deck.id}`)}
+            />
+          ))
+        )}
       </ScrollView>
     </SafeAreaView>
+
+    
   );
 }
 
@@ -214,3 +245,4 @@ const styles = StyleSheet.create({
     color: Colors.white,
   },
 });
+

@@ -7,6 +7,7 @@ import PrimaryButton from "@/components/PrimaryButton";
 import { GlobalStyles } from "../../theme/theme";
 import { useAuthStore } from "../../store/useAuthStore";
 
+// Cross-platform alert helper (web doesn't support Alert.alert)
 const showAlert = (title: string, message: string) => {
   if (Platform.OS === 'web') {
     window.alert(`${title}: ${message}`);
@@ -16,13 +17,16 @@ const showAlert = (title: string, message: string) => {
 };
 
 export default function Login() {
+  // Pulls the login action to store token + username globally
   const login = useAuthStore((s) => s.login);
   
+  // Form state
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
 
   const handleLogin = async () => {
+    // Basic validation before hitting the API
     if (!email || !password) {
       showAlert("Error", "Please fill in all fields.");
       return;
@@ -39,12 +43,15 @@ export default function Login() {
       const data = await response.json();
 
       if (response.ok) {
-        login(data.access_token, data.username)
+        // Save token + username to global store, then navigate home
+        login(data.access_token, data.username);
         router.replace("/(tabs)/home");
       } else {
+        // Show server-provided error message if available
         showAlert("Login Failed", data.detail || "Invalid credentials.");
       }
     } catch (error) {
+      // Likely a connection issue (server down, wrong URL, etc.)
       showAlert("Network Error", "Could not connect to the server.");
     } finally {
       setLoading(false);
@@ -58,6 +65,7 @@ export default function Login() {
       <Text style={GlobalStyles.heading2}>Welcome Back</Text>
       <Text style={GlobalStyles.body}>Log into Synapse to continue 🌿</Text>
 
+      {/* Email and password inputs */}
       <InputField 
         placeholder="Email" 
         value={email}
@@ -72,12 +80,12 @@ export default function Login() {
         onChangeText={setPassword}
       />
 
+      {/* Disable buttons while request is in flight */}
       <PrimaryButton
         label={loading ? "Logging in..." : "Login"}
         onPress={handleLogin}
         disabled={loading}
       />
-
       <PrimaryButton
         label="Go to Signup"
         variant="secondary"

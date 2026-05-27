@@ -59,9 +59,6 @@ export default function Upload() {
             </View>
           ))}
         </View>
-
-        {/* Summary Placeholder */}
-        <SummaryView summary="Summary will appear here after processing (placeholder)." />
       </ScrollView>
     </SafeAreaView>
   );

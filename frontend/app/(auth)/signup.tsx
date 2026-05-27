@@ -7,7 +7,7 @@ import PrimaryButton from "../../components/PrimaryButton";
 import { GlobalStyles } from "../../theme/theme";
 import { useAuthStore } from "../../store/useAuthStore";
 
-
+// Cross-platform alert helper (web doesn't support Alert.alert)
 const showAlert = (title: string, message: string) => {
   if (Platform.OS === 'web') {
     window.alert(`${title}: ${message}`);
@@ -17,14 +17,17 @@ const showAlert = (title: string, message: string) => {
 };
 
 export default function Signup() {
+  // Auth store action to log in after signup if needed
   const login = useAuthStore((s) => s.login);
   
+  // Form state
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const [name, setName] = useState("");
 
   const handleSignup = async () => {
+    // Basic validation before hitting the API
     if (!name || !email || !password) {
       showAlert("Error", "Please fill in all fields.");
       return;
@@ -41,12 +44,15 @@ export default function Signup() {
       const data = await response.json();
 
       if (response.ok) {
+        // Redirect to login after successful signup
         showAlert("Success", "Account created! Please log in.");
         router.replace("/(auth)/login");
       } else {
+        // Show server-provided error message if available
         showAlert("Signup Failed", data.detail || "Something went wrong.");
       }
     } catch (error) {
+      // Likely a connection issue (server down, wrong URL, etc.)
       showAlert("Network Error", "Could not connect to the server.");
     } finally {
       setLoading(false);
@@ -59,12 +65,13 @@ export default function Signup() {
 
       <Text style={GlobalStyles.heading2}>Create Account</Text>
       <Text style={GlobalStyles.body}>Start growing your knowledge garden 🌱</Text>
-      <InputField
-  placeholder="Name"
-  value={name}
-  onChangeText={setName}
-/>
 
+      {/* Name, email, password inputs */}
+      <InputField
+        placeholder="Name"
+        value={name}
+        onChangeText={setName}
+      />
       <InputField 
         placeholder="Email" 
         value={email}
@@ -79,12 +86,12 @@ export default function Signup() {
         onChangeText={setPassword}
       />
 
+      {/* Disable buttons while request is in flight */}
       <PrimaryButton
         label={loading ? "Signing up..." : "Sign Up"}
         onPress={handleSignup}
         disabled={loading}
       />
-
       <PrimaryButton
         label="Back to Login"
         variant="secondary"

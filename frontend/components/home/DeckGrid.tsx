@@ -1,14 +1,54 @@
-import { View, StyleSheet } from "react-native";
-import {router} from "expo-router"
+import { View, StyleSheet, ActivityIndicator, Text } from "react-native";
+import { router } from "expo-router";
+import { useEffect, useState } from "react";
 import DeckTile from "./DeckTile";
+import { useAuthStore } from "@/store/useAuthStore";
+type Deck = {
+  id: string;
+  title: string;
+  emoji: string;
+  color: string;
+  card_count: number;
+};
 
 export default function DeckGrid() {
+  const token = useAuthStore((s) => s.token);
+  const [decks, setDecks] = useState<Deck[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchDecks = async () => {
+      try {
+        const res = await fetch("http://127.0.0.1:8000/decks/", {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        const data = await res.json();
+        setDecks(data);
+      } catch (e) {
+        console.error("Failed to fetch decks", e);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchDecks();
+  }, []);
+
+  if (loading) return <ActivityIndicator />;
+  if (decks.length === 0) return <Text style={{ color: "#aaa" }}>No decks yet.</Text>;
+
   return (
     <View style={styles.deckGrid}>
-      <DeckTile title="Operating Systems" cards={18} emoji="💻" color="#FFD60A" onPress={() => router.push("/decks/operating-systems")} />
-      <DeckTile title="DBMS" cards={52} emoji="📚" color="#8A4FFF" />
-      <DeckTile title="Computer Networks" cards={120} emoji="🛜" color="#00E0A4" />
-      <DeckTile title="Data Structures" cards={200} emoji="👩‍🎓" color="#FF4D6D" />
+      {decks.map((deck) => (
+        <DeckTile
+          key={deck.id}
+          title={deck.title}
+          cards={deck.card_count}
+          emoji={deck.emoji}
+          color={deck.color}
+          onPress={() => router.push(`/decks/${deck.id}`)}
+        />
+      ))}
     </View>
   );
 }

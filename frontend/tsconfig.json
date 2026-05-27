@@ -14,5 +14,5 @@
     "**/*.tsx",
     ".expo/types/**/*.ts",
     "expo-env.d.ts"
-, "app/decks/operating-systems.tsx"  ]
+, "app/(tabs)/decks/operating-systems.tsx"  ]
 }

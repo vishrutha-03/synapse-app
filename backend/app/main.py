@@ -3,6 +3,8 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 from app.routes.upload import router as upload_router
 from app.routes.auth import router as auth_router
+from app.routes.decks import router as decks_router
+
 import os
 
 app = FastAPI()
@@ -25,12 +27,5 @@ def read_root():
 
 app.include_router(upload_router)
 app.include_router(auth_router)
+app.include_router(decks_router)
 
-@app.get("/health")
-def health():
-    return {"status": "ok"}
-
-@app.get("/test-db")
-def test_db():
-    result = supabase.table("documents").select("*").execute()
-    return {"data": result.data}
