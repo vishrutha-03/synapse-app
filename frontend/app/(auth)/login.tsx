@@ -39,7 +39,7 @@ export default function Login() {
       const data = await response.json();
 
       if (response.ok) {
-        login(data.access_token);
+        login(data.access_token, data.username)
         router.replace("/(tabs)/home");
       } else {
         showAlert("Login Failed", data.detail || "Invalid credentials.");

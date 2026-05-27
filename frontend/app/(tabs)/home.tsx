@@ -6,12 +6,17 @@ import HomeHeader from "../../components/home/HomeHeader";
 import StreakBanner from "../../components/home/StreakBanner";
 import DeckGrid from "../../components/home/DeckGrid";
 import TodaySessionCard from "../../components/home/TodaySessionCard";
+import { useAuthStore } from "../../store/useAuthStore";
 
 export default function Home() {
+  const username = useAuthStore((s) => s.username);
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: Colors.bg }}>
       <ScrollView contentContainerStyle={styles.container} showsVerticalScrollIndicator={false}>
-        <HomeHeader name="Mahima" subtitle="You're on a roll today" />
+        <HomeHeader
+  name={username || "User"}
+  subtitle="You're on a roll today"
+/>
         <StreakBanner streakDays={12} bestDays={21} />
       
 

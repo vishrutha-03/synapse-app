@@ -7,6 +7,7 @@ import PrimaryButton from "../../components/PrimaryButton";
 import { GlobalStyles } from "../../theme/theme";
 import { useAuthStore } from "../../store/useAuthStore";
 
+
 const showAlert = (title: string, message: string) => {
   if (Platform.OS === 'web') {
     window.alert(`${title}: ${message}`);
@@ -21,9 +22,10 @@ export default function Signup() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
+  const [name, setName] = useState("");
 
   const handleSignup = async () => {
-    if (!email || !password) {
+    if (!name || !email || !password) {
       showAlert("Error", "Please fill in all fields.");
       return;
     }
@@ -33,7 +35,7 @@ export default function Signup() {
       const response = await fetch("http://127.0.0.1:8000/auth/signup", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, password }),
+        body: JSON.stringify({ name, email, password }),
       });
 
       const data = await response.json();
@@ -57,6 +59,11 @@ export default function Signup() {
 
       <Text style={GlobalStyles.heading2}>Create Account</Text>
       <Text style={GlobalStyles.body}>Start growing your knowledge garden 🌱</Text>
+      <InputField
+  placeholder="Name"
+  value={name}
+  onChangeText={setName}
+/>
 
       <InputField 
         placeholder="Email" 

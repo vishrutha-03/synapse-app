@@ -25,11 +25,12 @@ async def signup(user: UserCreate):
         user_id = str(uuid.uuid4())
         
         new_user = {
-            "id": user_id,
-            "email": user.email,
-            "hashed_password": hashed_password,
-            "username": user.email.split("@")[0].capitalize()
-        }
+    "id": user_id,
+    "name": user.name,
+    "email": user.email,
+    "hashed_password": hashed_password,
+    "username": user.name
+}
         
         await users_collection.insert_one(new_user)
         
@@ -65,11 +66,11 @@ async def login(user: UserLogin):
         token = create_access_token({"sub": db_user["id"], "email": db_user["email"], "username": db_user.get("username")})
         
         return {
-            "message": "Login successful",
-            "access_token": token,
-            "user_id": db_user["id"],
-            "username": db_user.get("username"),
-        }
+    "message": "Login successful",
+    "access_token": token,
+    "user_id": db_user["id"],
+    "username": db_user.get("username"),
+}
     except HTTPException:
         raise
     except Exception as e:

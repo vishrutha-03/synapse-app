@@ -5,12 +5,14 @@ type Props = {
   label: string;
   onPress: () => void;
   variant?: "primary" | "secondary";
+  disabled?: boolean;
 };
 
 export default function PrimaryButton({
   label,
   onPress,
   variant = "primary",
+  disabled = false,
 }: Props) {
   const btnStyle =
     variant === "primary" ? GlobalStyles.btnPrimary : GlobalStyles.btnSecondary;
@@ -21,8 +23,10 @@ export default function PrimaryButton({
       : GlobalStyles.btnSecondaryText;
 
   return (
-    <Pressable style={btnStyle} onPress={onPress}>
-      <Text style={textStyle}>{label}</Text>
-    </Pressable>
+  <Pressable
+  style={btnStyle}
+  onPress={onPress}
+  disabled={disabled}
+></Pressable>
   );
 }
