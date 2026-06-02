@@ -13,3 +13,4 @@ db = client.synapse_db
 users_collection = db.users
 documents_collection = db.documents
 flashcards_collection = db.flashcards
+decks_collection = db["decks"]

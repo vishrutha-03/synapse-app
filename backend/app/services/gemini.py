@@ -1,14 +1,16 @@
 import os
+import json
 from dotenv import load_dotenv
 from google import genai
 
 load_dotenv(override=True)
 
-# Initialize Gemini client once at module level
-client = genai.Client(api_key=os.getenv("GEMINI_API_KEY"))
+client = genai.Client(
+    api_key=os.getenv("GEMINI_API_KEY")
+)
 
 def generate_summary_and_flashcards(text: str):
-    # Cap input to avoid token limits
+
     text = text[:5000]
 
     prompt = f"""
@@ -34,10 +36,19 @@ def generate_summary_and_flashcards(text: str):
     """
 
     try:
+
         response = client.models.generate_content(
             model="gemini-2.5-flash",
             contents=prompt
         )
-        return response.text
+
+        cleaned = response.text.strip()
+
+        cleaned = cleaned.replace("```json", "")
+        cleaned = cleaned.replace("```", "")
+
+        return json.loads(cleaned)
+
     except Exception as e:
+
         return {"error": str(e)}

@@ -1,9 +1,11 @@
 import { SafeAreaView } from "react-native-safe-area-context";
 import { View, Text, TouchableOpacity, StyleSheet, ScrollView } from "react-native";
 import { Colors, Typography, Spacing, Radii, Shadows } from "../../theme/theme";
-
+import * as ImagePicker from "expo-image-picker";
 import UploadZone from "../../components/UploadZone";
 import SummaryView from "../../components/SummaryView";
+import { useState } from "react";
+import { useAuthStore } from "../../store/useAuthStore";
 
 const METHODS = [
   { icon: "📄", label: "PDF Slides", color: Colors.yellow },
@@ -13,6 +15,66 @@ const METHODS = [
 ];
 
 export default function Upload() {
+  const token = useAuthStore((s) => s.token);
+  const [summary, setSummary] = useState("");
+const [flashcards, setFlashcards] = useState<any[]>([]);
+  const pickImage = async () => {
+    const result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      allowsMultipleSelection: true,
+      quality: 1,
+    });
+
+    console.log(result);
+
+    if (!result.canceled) {
+      uploadImages(result.assets);
+    }
+  };
+ const uploadImages = async (assets: any[]) => {
+
+  const formData = new FormData();
+
+  assets.forEach((asset: any) => {
+
+    formData.append(
+      "file",
+      asset.file
+    );
+
+  });
+
+  try {
+
+    const response = await fetch(
+      "http://127.0.0.1:8000/ai/upload-images",
+      {
+        method: "POST",
+
+headers: {
+  Authorization: `Bearer ${token}`,
+},
+
+body: formData,
+      }
+    );
+
+    const data = await response.json();
+
+    console.log(data);
+
+setSummary(data.summary);
+setFlashcards(data.flashcards);
+
+    alert("Upload successful!");
+
+  } catch (error) {
+
+    console.log(error);
+
+    alert("Upload failed");
+  }
+};
   return (
     <SafeAreaView style={styles.safe}>
       <ScrollView
@@ -29,9 +91,14 @@ export default function Upload() {
         <View style={styles.methodGrid}>
           {METHODS.map((m, i) => (
             <TouchableOpacity
-              key={i}
-              style={[styles.methodCard, { backgroundColor: m.color }]}
-            >
+  key={i}
+  style={[styles.methodCard, { backgroundColor: m.color }]}
+  onPress={() => {
+    if (m.label === "Image Scan") {
+      pickImage();
+    }
+  }}
+>
               <Text style={styles.methodIcon}>{m.icon}</Text>
               <Text style={styles.methodLabel}>{m.label}</Text>
             </TouchableOpacity>
@@ -43,7 +110,18 @@ export default function Upload() {
           <UploadZone />
         </View>
 
+
         {/* Output Card */}
+        {summary ? (
+  <View style={styles.outputCard}>
+    <Text style={styles.outputTitle}>SUMMARY</Text>
+
+    <Text style={styles.outputText}>
+      {summary}
+    </Text>
+  </View>
+) : null}
+
         <View style={styles.outputCard}>
           <Text style={styles.outputTitle}>WHAT YOU'LL GET</Text>
 

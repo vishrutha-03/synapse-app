@@ -3,7 +3,6 @@ from app.services.database import users_collection
 from app.models.auth import UserCreate, UserLogin
 from app.services.auth_utils import get_password_hash, verify_password, create_access_token
 import uuid
-
 router = APIRouter(
     prefix="/auth",
     tags=["auth"]

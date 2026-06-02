@@ -4,6 +4,7 @@ from fastapi.staticfiles import StaticFiles
 from app.routes.upload import router as upload_router
 from app.routes.auth import router as auth_router
 from app.routes.decks import router as decks_router
+from app.routes.ai import router as ai_router
 
 import os
 
@@ -28,4 +29,4 @@ def read_root():
 app.include_router(upload_router)
 app.include_router(auth_router)
 app.include_router(decks_router)
-
+app.include_router(ai_router)
