@@ -1,20 +1,35 @@
 import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
 import { Colors, Typography, Spacing, Radii, Shadows } from "../../theme/theme";
 
-export default function TodaySessionCard() {
+// Define TypeScript data properties for incoming live backend scores
+interface TodaySessionCardProps {
+  cardsStudied: number;
+  accuracyRate: number;
+}
+
+export default function TodaySessionCard({ 
+  cardsStudied, 
+  accuracyRate 
+}: TodaySessionCardProps) {
+  
+  // Change visual details conditionally based on whether they studied today
+  const hasStudied = cardsStudied > 0;
+  const cardTitle = hasStudied ? `${cardsStudied} cards reviewed` : "0 cards studied today";
+  const subTitle = hasStudied ? `Session accuracy: ${accuracyRate}% 🎯` : "Tap to review a card deck!";
+
   return (
     <View style={styles.sessionCard}>
       <View style={styles.sessionIcon}>
-        <Text style={{ fontSize: 18 }}>🎯</Text>
+        <Text style={{ fontSize: 18 }}>{hasStudied ? "🔥" : "🎯"}</Text>
       </View>
 
       <View style={{ flex: 1 }}>
-        <Text style={styles.sessionTitle}>24 cards due</Text>
-        <Text style={styles.sessionSub}>~12 min to complete</Text>
+        <Text style={styles.sessionTitle}>{cardTitle}</Text>
+        <Text style={styles.sessionSub}>{subTitle}</Text>
       </View>
 
       <TouchableOpacity style={styles.goBtn}>
-        <Text style={styles.goText}>Go →</Text>
+        <Text style={styles.goText}>{hasStudied ? "More →" : "Go →"}</Text>
       </TouchableOpacity>
     </View>
   );
