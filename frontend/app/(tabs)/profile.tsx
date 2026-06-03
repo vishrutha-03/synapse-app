@@ -87,17 +87,20 @@ export default function ProfileScreen() {
           ))}
         </View>
 
-        {/* ── SETTINGS SHELF UTILITIES GRID ── */}
-        <Text style={styles.sectionDividerTitle}>⚙️ Settings</Text>
-        <View style={styles.settingsGroupCard}>
-          {["🔔 Notifications", "📤 Export Data", "❓ Help & Support"].map((settingLabel, index) => (
-            <TouchableOpacity key={index} style={styles.settingsRowInteractive} activeOpacity={0.7}>
-              <Text style={styles.settingsRowText}>{settingLabel}</Text>
-              <Text style={styles.settingsRowArrowPointer}>→</Text>
-            </TouchableOpacity>
-          ))}
-        </View>
-
+{/* ── SETTINGS SHELF UTILITIES GRID ── */}
+<Text style={styles.sectionDividerTitle}>⚙️ Settings</Text>
+<View style={styles.settingsGroupCard}>
+  {[
+    { label: "🔔 Notifications", onPress: () => {} },
+    { label: "📤 Export Data", onPress: () => {} },
+    { label: "❓ Help & Support", onPress: () => router.push("/help-support") },
+  ].map((item, index) => (
+    <TouchableOpacity key={index} style={styles.settingsRowInteractive} activeOpacity={0.7} onPress={item.onPress}>
+      <Text style={styles.settingsRowText}>{item.label}</Text>
+      <Text style={styles.settingsRowArrowPointer}>→</Text>
+    </TouchableOpacity>
+  ))}
+</View>
         {/* ── LOGOUT TRIGGER CONTAINER ACTION ── */}
         <TouchableOpacity
           style={styles.logoutBtnAction}
