@@ -1,10 +1,10 @@
-import { View, Text, Alert, Platform } from "react-native";
+import { View, Text, Alert, Platform, ScrollView } from "react-native";
 import { useState } from "react";
 import { router } from "expo-router";
 import SynapseLogo from "@/components/SynapseLogo";
 import InputField from "@/components/InputField";
 import PrimaryButton from "@/components/PrimaryButton";
-import { GlobalStyles } from "../../theme/theme";
+import { Colors, GlobalStyles } from "../../theme/theme";
 import { useAuthStore } from "../../store/useAuthStore";
 
 // Cross-platform alert helper (web doesn't support Alert.alert)
@@ -64,39 +64,19 @@ export default function Login() {
   };
 
   return (
-    <View style={[GlobalStyles.screen, { padding: 24, justifyContent: "center" }]}>
+  <View style={{ flex: 1, backgroundColor: Colors.bg }}>
+    <ScrollView
+      contentContainerStyle={{ padding: 24, paddingTop: 60, paddingBottom: 40 }}
+      keyboardShouldPersistTaps="handled"
+      showsVerticalScrollIndicator={false}
+    >
       <SynapseLogo />
-
       <Text style={GlobalStyles.heading2}>Welcome Back</Text>
       <Text style={GlobalStyles.body}>Log into Synapse to continue 🌿</Text>
-
-      {/* Email and password inputs */}
-      <InputField 
-        placeholder="Email" 
-        value={email}
-        onChangeText={setEmail}
-        autoCapitalize="none"
-        keyboardType="email-address"
-      />
-      <InputField 
-        placeholder="Password" 
-        secureTextEntry 
-        value={password}
-        onChangeText={setPassword}
-      />
-
-      {/* Disable buttons while request is in flight */}
-      <PrimaryButton
-        label={loading ? "Logging in..." : "Login"}
-        onPress={handleLogin}
-        disabled={loading}
-      />
-      <PrimaryButton
-        label="Go to Signup"
-        variant="secondary"
-        onPress={() => router.push("/(auth)/signup")}
-        disabled={loading}
-      />
-    </View>
-  );
-}
+      <InputField placeholder="Email" value={email} onChangeText={setEmail} autoCapitalize="none" keyboardType="email-address" />
+      <InputField placeholder="Password" secureTextEntry value={password} onChangeText={setPassword} />
+      <PrimaryButton label={loading ? "Logging in..." : "Login"} onPress={handleLogin} disabled={loading} />
+      <PrimaryButton label="Go to Signup" variant="secondary" onPress={() => router.push("/(auth)/signup")} disabled={loading} />
+    </ScrollView>
+  </View>
+);}

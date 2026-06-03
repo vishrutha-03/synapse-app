@@ -24,9 +24,11 @@ export default function PrimaryButton({
 
   return (
   <Pressable
-  style={btnStyle}
-  onPress={onPress}
-  disabled={disabled}
-></Pressable>
-  );
+    style={btnStyle}
+    onPress={onPress}
+    disabled={disabled}
+  >
+    <Text style={textStyle}>{label}</Text>
+  </Pressable>
+);
 }
