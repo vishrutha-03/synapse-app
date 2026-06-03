@@ -8,11 +8,15 @@ export default function StreakBanner({
   streakDays: number;
   bestDays: number;
 }) {
+  // Determine text based on whether the streak is active or sitting at zero
+  const subText = streakDays > 0 ? "Keep it going today! 🙌" : "Study a deck today to start a streak!";
+  const titleText = streakDays > 0 ? `${streakDays}-day streak!` : "No active streak";
+
   return (
     <View style={styles.streakCard}>
       <View style={{ flex: 1 }}>
-        <Text style={styles.streakTitle}>🔥 {streakDays}-day streak!</Text>
-        <Text style={styles.streakSub}>Keep it going today</Text>
+        <Text style={styles.streakTitle}>🔥 {titleText}</Text>
+        <Text style={styles.streakSub}>{subText}</Text>
       </View>
 
       <View style={styles.bestPill}>
