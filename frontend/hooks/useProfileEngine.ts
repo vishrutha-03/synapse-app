@@ -18,7 +18,7 @@ export type AchievementItem = {
   color: string;
 };
 
-const API_BASE_URL = "https://mahima4569-synapse-backend.hf.space/";
+const API_BASE_URL = "https://mahima4569-synapse-backend.hf.space";
 
 const REWARDS_METRICS_SCHEMA: AchievementItem[] = [
   { icon: "🔥", label: "7-Day Streak", key: "streak", threshold: 7, color: "#FFD60A" },
