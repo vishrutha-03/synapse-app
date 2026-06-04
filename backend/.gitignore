@@ -1,0 +1,10 @@
+# run this in your backend folder
+echo "*.jpg
+*.jpeg
+*.png
+*.gif
+*.zip
+__pycache__/
+*.pyc
+.env
+venv/" > .gitignore
