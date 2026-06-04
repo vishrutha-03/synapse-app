@@ -22,12 +22,14 @@ def get_user_id(authorization: str) -> str:
         raise HTTPException(status_code=401, detail="Invalid token")
 
 
+import re
+
 @router.post("/upload")
 async def upload_document(
     request: Request,
     file: UploadFile = File(None),
     raw_text: str = Form(None),
-    authorization: str = Header(...),  # require auth
+    authorization: str = Header(...),
 ):
     user_id = get_user_id(authorization)
     document_id = str(uuid.uuid4())
@@ -43,17 +45,34 @@ async def upload_document(
         file_url = f"{base_url}/uploads/{document_id}_{file.filename}"
         text_to_process = file_bytes.decode("utf-8", errors="ignore")
 
+    print(f"\n📝 Processing text input (Length: {len(text_to_process) if text_to_process else 0} chars)...")
     ai_response = generate_summary_and_flashcards(text_to_process)
 
-    if isinstance(ai_response, dict):
-        return ai_response
-
+    # ── 🛠️ NEW BULLETPROOF JSON EXTRACTION ENGINE ──
     try:
-        cleaned = ai_response.strip().replace("```json", "").replace("```", "")
-        ai_data = json.loads(cleaned)
-    except Exception as e:
-        return {"error": "Failed to parse Gemini response", "details": str(e)}
+        if isinstance(ai_response, dict):
+            ai_data = ai_response
+        else:
+            print("🤖 Raw AI Text Received. Extracting clean JSON string...")
+            # Uses regex to find everything between the outermost curly braces { ... }
+            json_match = re.search(r"\{.*\}", ai_response, re.DOTALL)
+            if json_match:
+                clean_json_string = json_match.group(0)
+                ai_data = json.loads(clean_json_string)
+            else:
+                raise ValueError("No valid JSON structure found in AI response text block.")
+                
+    except Exception as parse_error:
+        print("\n❌ ────────── GEMINI JSON PARSING CRASH ────────── ❌")
+        print(f"Error Type: {str(parse_error)}")
+        print(f"Raw Output causing crash:\n{ai_response}")
+        print("❌ ─────────────────────────────────────────────── ❌\n")
+        raise HTTPException(
+            status_code=500, 
+            detail=f"Failed to cleanly structure AI Flashcards: {str(parse_error)}"
+        )
 
+    # Convert to schema structure
     flashcards = [
         {
             "id": str(uuid.uuid4()),
@@ -61,29 +80,30 @@ async def upload_document(
             "question": fc["question"],
             "answer": fc["answer"]
         }
-        for fc in ai_data["flashcards"]
+        # Safely uses .get() to prevent missing key errors
+        for fc in ai_data.get("flashcards", [])
     ]
 
-    # Save document with user_id and embedded flashcards
     new_doc = {
         "id": document_id,
-        "user_id": user_id,                  # 👈 needed to fetch per user
+        "user_id": user_id,
         "file_name": file.filename if file else "Text input",
         "file_url": file_url,
-        "summary": ai_data["summary"],
-        "flashcards": flashcards,             # 👈 embedded so decks route works
+        "summary": ai_data.get("summary", "No summary generated."),
+        "flashcards": flashcards,
         "emoji": "📄",
         "color": "#8A4FFF",
     }
+    
+    # Save target logs
     await documents_collection.insert_one(new_doc)
-
-    # Still save to flashcards_collection separately
     if flashcards:
         await flashcards_collection.insert_many(flashcards)
+        print(f"🔥 Successfully saved document and {len(flashcards)} generated flashcards to MongoDB!")
 
     return {
         "message": "success",
         "document_id": document_id,
-        "summary": ai_data["summary"],
-        "flashcards": ai_data["flashcards"]
+        "summary": new_doc["summary"],
+        "flashcards": [ {"question": f["question"], "answer": f["answer"]} for f in flashcards ]
     }
