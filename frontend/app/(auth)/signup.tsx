@@ -26,7 +26,81 @@ export default function Signup() {
   const [loading, setLoading] = useState(false);
   const [name, setName] = useState("");
 
+  const [otp, setOtp] = useState("");
+const [otpSent, setOtpSent] = useState(false);
+const [otpVerified, setOtpVerified] = useState(false);
+const sendOtp = async () => {
+  try {
+    const response = await fetch(
+  "https://mahima4569-synapse-backend.hf.space//otp/send",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          email,
+        }),
+      }
+    );
+
+    const data = await response.json();
+
+    if (response.ok) {
+      showAlert(
+  "OTP Sent",
+  "Check your BMSCE email for the verification code."
+);
+      setOtpSent(true);
+    } else {
+      alert(data.detail);
+    }
+  } catch {
+    showAlert(
+  "Error",
+  "Unable to send OTP. Please try again."
+);
+  }
+};
+const verifyOtp = async () => {
+  try {
+    const response = await fetch(
+  "https://mahima4569-synapse-backend.hf.space//otp/verify",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          email,
+          otp,
+        }),
+      }
+    );
+
+    const data = await response.json();
+
+    if (data.verified) {
+      showAlert(
+  "Verified",
+  "Your email has been successfully verified."
+);
+      setOtpVerified(true);
+    } else {
+      showAlert(
+  "Verification Failed",
+  "The OTP entered is incorrect."
+);
+    }
+  } catch {
+    alert("Verification failed");
+  }
+};
   const handleSignup = async () => {
+    if (!otpVerified) {
+  showAlert("Error", "Please verify your OTP first.");
+  return;
+}
     // Basic validation before hitting the API
     if (!name || !email || !password) {
       showAlert("Error", "Please fill in all fields.");
@@ -35,7 +109,7 @@ export default function Signup() {
 
     setLoading(true);
     try {
-      const response = await fetch("https://synapse-app-backend.onrender.com/auth/signup", {
+      const response = await fetch("https://mahima4569-synapse-backend.hf.space//auth/signup", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ name, email, password }),
@@ -79,6 +153,29 @@ export default function Signup() {
         autoCapitalize="none"
         keyboardType="email-address"
       />
+      <PrimaryButton
+  label={otpVerified ? "Email Verified ✓" : "Send OTP"}
+  onPress={sendOtp}
+  disabled={otpVerified}
+/>
+{otpSent && !otpVerified && (
+  <InputField
+    placeholder="Enter OTP"
+    value={otp}
+    onChangeText={setOtp}
+  />
+)}
+{otpSent && !otpVerified && (
+  <PrimaryButton
+    label="Verify OTP"
+    onPress={verifyOtp}
+  />
+)}
+{otpVerified && (
+  <Text style={{ color: "green", marginVertical: 10 }}>
+    ✅ 
+  </Text>
+)}
       <InputField 
         placeholder="Password" 
         secureTextEntry 
@@ -87,11 +184,11 @@ export default function Signup() {
       />
 
       {/* Disable buttons while request is in flight */}
-      <PrimaryButton
-        label={loading ? "Signing up..." : "Sign Up"}
-        onPress={handleSignup}
-        disabled={loading}
-      />
+     <PrimaryButton
+  label={loading ? "Signing up..." : "Sign Up"}
+  onPress={handleSignup}
+  disabled={loading || !otpVerified}
+/>
       <PrimaryButton
         label="Back to Login"
         variant="secondary"
