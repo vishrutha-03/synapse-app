@@ -16,6 +16,7 @@ import uuid
 import easyocr
 import shutil
 import os
+import gc  # 👈 Added core garbage collector interface
 
 router = APIRouter(
     prefix="/ai",
@@ -24,9 +25,7 @@ router = APIRouter(
 
 # Get logged in user
 def get_user_id(authorization: str) -> str:
-
     try:
-
         token = authorization.replace(
             "Bearer ",
             ""
@@ -41,7 +40,6 @@ def get_user_id(authorization: str) -> str:
         return payload.get("sub")
 
     except Exception:
-
         raise HTTPException(
             status_code=401,
             detail="Invalid token"
@@ -53,11 +51,8 @@ async def upload_images(
     authorization: str = Header(...),
     file: UploadFile = File(...)
 ):
-
     # Current logged in user
-    user_id = get_user_id(
-        authorization
-    )
+    user_id = get_user_id(authorization)
 
     # Unique document ID
     document_id = str(uuid.uuid4())
@@ -72,16 +67,22 @@ async def upload_images(
             buffer
         )
 
-    # OCR reader
-    reader = easyocr.Reader(['en'])
+    # ── 🧠 LIGHTWEIGHT RAM OPTIMIZATION PASS ──
+    print("⏳ Initializing EasyOCR engine in CPU standby mode...")
+    # gpu=False prevents PyTorch from searching for heavy machine learning graphics drivers
+    reader = easyocr.Reader(['en'], gpu=False)
 
-    # Extract text from image
+    print("📄 Extracting text layers from image assets...")
     result = reader.readtext(
         file_path,
         detail=0
     )
-
     extracted_text = " ".join(result)
+
+    # ── 🧹 IMMEDIATE RAM WIPEOUT ──
+    print("🧹 Cleaning memory cache pools to prevent Render crash...")
+    del reader   # Delete the heavy reader instance manually
+    gc.collect() # Force Python engine to wipe the memory block instantly
 
     print("OCR TEXT:")
     print(extracted_text)
@@ -129,7 +130,6 @@ async def upload_images(
 
     # Save flashcards separately too
     if flashcards:
-
         await flashcards_collection.insert_many(
             flashcards
         )

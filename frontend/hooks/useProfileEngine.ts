@@ -18,7 +18,7 @@ export type AchievementItem = {
   color: string;
 };
 
-const API_BASE_URL = "http://127.0.0.1:8000";
+const API_BASE_URL = "https://synapse-app-backend.onrender.com";
 
 const REWARDS_METRICS_SCHEMA: AchievementItem[] = [
   { icon: "🔥", label: "7-Day Streak", key: "streak", threshold: 7, color: "#FFD60A" },

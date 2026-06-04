@@ -6,7 +6,7 @@ export type Mode = "browse" | "study" | "quiz";
 export type Rating = "easy" | "hard" | "got_it";
 export type QuizOption = { text: string; correct: boolean };
 
-const API = "http://127.0.0.1:8000";
+const API = "https://synapse-app-backend.onrender.com";
 
 function shuffle<T>(arr: T[]): T[] {
   return [...arr].sort(() => Math.random() - 0.5);

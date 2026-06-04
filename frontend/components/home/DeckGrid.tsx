@@ -19,7 +19,7 @@ export default function DeckGrid() {
   useEffect(() => {
     const fetchDecks = async () => {
       try {
-        const res = await fetch("http://127.0.0.1:8000/decks/", {
+        const res = await fetch("https://synapse-app-backend.onrender.com/decks/", {
           headers: { Authorization: `Bearer ${token}` },
         });
         const data = await res.json();

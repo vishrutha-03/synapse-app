@@ -47,7 +47,7 @@ const [flashcards, setFlashcards] = useState<any[]>([]);
   try {
 
     const response = await fetch(
-      "http://127.0.0.1:8000/ai/upload-images",
+      "https://synapse-app-backend.onrender.com/ai/upload-images",
       {
         method: "POST",
 

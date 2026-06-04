@@ -43,7 +43,7 @@ export default function UploadZone() {
         type: "application/pdf",
       } as any);
 
-      const res = await fetch("http://127.0.0.1:8000/upload", {
+      const res = await fetch("https://synapse-app-backend.onrender.com/upload", {
         method: "POST",
         headers: { Authorization: `Bearer ${token}` },
         body: formData,
@@ -72,7 +72,7 @@ export default function UploadZone() {
       const formData = new FormData();
       formData.append("raw_text", textInput.trim());
 
-      const res = await fetch("http://127.0.0.1:8000/upload", {
+      const res = await fetch("https://synapse-app-backend.onrender.com/upload", {
         method: "POST",
         headers: { Authorization: `Bearer ${token}` },
         body: formData,
