@@ -15,3 +15,4 @@ documents_collection = db.documents
 flashcards_collection = db.flashcards
 decks_collection = db["decks"]
 study_logs_collection = db["study_logs"]
+otp_collection = db["otp_codes"]

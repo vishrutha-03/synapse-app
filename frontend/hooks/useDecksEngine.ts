@@ -11,7 +11,7 @@ export type Deck = {
 
 export type FilterMode = "ALL" | "RECENT";
 
-const API_BASE_URL = "https://synapse-app-backend.onrender.com";
+const API_BASE_URL = "https://mahima4569-synapse-backend.hf.space/";
 
 export function useDecksEngine() {
   const token = useAuthStore((state) => state.token);
