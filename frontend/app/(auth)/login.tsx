@@ -34,7 +34,7 @@ export default function Login() {
 
     setLoading(true);
     try {
-      const response = await fetch("https://mahima4569-synapse-backend.hf.space//auth/login", {
+      const response = await fetch("https://mahima4569-synapse-backend.hf.space/auth/login", {
   method: "POST",
   headers: {
     "Content-Type": "application/json",

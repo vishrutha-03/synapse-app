@@ -32,7 +32,7 @@ const [otpVerified, setOtpVerified] = useState(false);
 const sendOtp = async () => {
   try {
     const response = await fetch(
-  "https://mahima4569-synapse-backend.hf.space//otp/send",
+  "https://mahima4569-synapse-backend.hf.space/otp/send",
       {
         method: "POST",
         headers: {
@@ -65,7 +65,7 @@ const sendOtp = async () => {
 const verifyOtp = async () => {
   try {
     const response = await fetch(
-  "https://mahima4569-synapse-backend.hf.space//otp/verify",
+  "https://mahima4569-synapse-backend.hf.space/otp/verify",
       {
         method: "POST",
         headers: {
@@ -109,7 +109,7 @@ const verifyOtp = async () => {
 
     setLoading(true);
     try {
-      const response = await fetch("https://mahima4569-synapse-backend.hf.space//auth/signup", {
+      const response = await fetch("https://mahima4569-synapse-backend.hf.space/auth/signup", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ name, email, password }),

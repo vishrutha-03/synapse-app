@@ -19,7 +19,7 @@ export default function DeckGrid() {
   useEffect(() => {
     const fetchDecks = async () => {
       try {
-        const res = await fetch("https://mahima4569-synapse-backend.hf.space//decks/", {
+        const res = await fetch("https://mahima4569-synapse-backend.hf.space/decks/", {
           headers: { Authorization: `Bearer ${token}` },
         });
         const data = await res.json();
