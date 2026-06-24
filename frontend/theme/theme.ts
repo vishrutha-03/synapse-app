@@ -6,23 +6,23 @@ import { StyleSheet, ViewStyle, TextStyle } from "react-native";
  *
  * Bold, high-contrast, sharp edges, thick borders, hard shadows.
  */
-
-export const Colors = {
-  // Background + surfaces
+export const LightColors = {
+  // Backgrounds
   bg: "#F8F8F8",
   surface: "#FFFFFF",
   surfaceAlt: "#F2F2F2",
 
-  // Borders + text
+  // Text + Borders
   border: "#111111",
   text: "#111111",
   textMuted: "#444444",
   textGhost: "#777777",
 
-  // Accent colors (neon-ish but controlled)
-  primary: "#00E0A4", // mint neon
+  // Accents
+  primary: "#00E0A4",
   primaryDark: "#00A87C",
-  secondary: "#FF4D6D", // hot pink-red
+
+  secondary: "#FF4D6D",
   secondaryDark: "#C8304A",
 
   yellow: "#FFD60A",
@@ -40,6 +40,42 @@ export const Colors = {
   black: "#111111",
   transparent: "transparent",
 };
+
+export const DarkColors = {
+  // Backgrounds
+  bg: "#121212",
+  surface: "#1E1E1E",
+  surfaceAlt: "#2B2B2B",
+
+  // Text + Borders
+  border: "#FFFFFF",
+  text: "#FFFFFF",
+  textMuted: "#D1D5DB",
+  textGhost: "#9CA3AF",
+
+  // Accents (same bright brutal colors)
+  primary: "#00F5B4",
+  primaryDark: "#00C893",
+
+  secondary: "#FF5C7C",
+  secondaryDark: "#E03A5C",
+
+  yellow: "#FFE347",
+  blue: "#6CA8FF",
+  purple: "#A970FF",
+
+  // Semantic
+  success: "#00F5B4",
+  warning: "#FFE347",
+  error: "#FF5C7C",
+  info: "#6CA8FF",
+
+  // Absolute
+  white: "#FFFFFF",
+  black: "#000000",
+  transparent: "transparent",
+};
+export const Colors = LightColors;
 
 export const Typography = {
   // Neubrutalism looks best with strong sans fonts
