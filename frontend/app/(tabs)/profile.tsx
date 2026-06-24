@@ -89,7 +89,7 @@ const styles = useMemo(() => makeStyles(Colors), [darkMode]);
         <View style={[styles.settingsGroupCard, { backgroundColor: Colors.surface, borderColor: Colors.border }]}>
           {[
             { label: darkMode ? "☀️ Light Mode" : "🌙 Dark Mode", onPress: toggleTheme },
-            { label: "📤 Export Data", onPress: () => {} },
+            
             { label: "❓ Help & Support", onPress: () => router.push("/help-support") },
           ].map((item, index) => (
             <TouchableOpacity key={index} style={styles.settingsRowInteractive} activeOpacity={0.7} onPress={item.onPress}>
