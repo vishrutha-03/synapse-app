@@ -1,16 +1,21 @@
 import os
 import json
+import time
 from dotenv import load_dotenv
 from google import genai
 
 load_dotenv(override=True)
 
-client = genai.Client(
-    api_key=os.getenv("GEMINI_API_KEY")
-)
+# List of API keys (add both in your .env file)
+API_KEYS = [
+    os.getenv("GEMINI_API_KEY"),
+    os.getenv("GEMINI_API_KEY2")
+]
+
 
 def generate_summary_and_flashcards(text: str):
 
+    # Limit very large OCR outputs
     text = text[:5000]
 
     prompt = f"""
@@ -35,20 +40,79 @@ def generate_summary_and_flashcards(text: str):
     {text}
     """
 
-    try:
+    # Try each API key
+    for api_key in API_KEYS:
 
-        response = client.models.generate_content(
-            model="gemini-2.5-flash",
-            contents=prompt
+        # Skip empty keys
+        if not api_key:
+            continue
+
+        print(f"Using API key: {api_key[:10]}...")
+
+        client = genai.Client(
+            api_key=api_key
         )
 
-        cleaned = response.text.strip()
+        # Retry 3 times with current key
+        for attempt in range(3):
 
-        cleaned = cleaned.replace("```json", "")
-        cleaned = cleaned.replace("```", "")
+            try:
+                response = client.models.generate_content(
+                    model="gemini-2.5-flash",
+                    contents=prompt
+                )
 
-        return json.loads(cleaned)
+                cleaned = response.text.strip()
 
-    except Exception as e:
+                # Remove markdown if Gemini sends it
+                cleaned = cleaned.replace(
+                    "```json",
+                    ""
+                )
 
-        return {"error": str(e)}
+                cleaned = cleaned.replace(
+                    "```",
+                    ""
+                )
+
+                cleaned = cleaned.strip()
+
+                data = json.loads(cleaned)
+
+                # Validate response format
+                if (
+                    "summary" not in data or
+                    "flashcards" not in data
+                ):
+                    return {
+                        "error":
+                        "Gemini returned invalid format"
+                    }
+
+                return data
+
+            except Exception as e:
+
+                print(
+                    f"API key {api_key[:10]} "
+                    f"attempt {attempt + 1} failed:"
+                )
+
+                print(str(e))
+
+                # Wait before retrying
+                if attempt < 2:
+                    time.sleep(5)
+
+        print(
+            "Current API key exhausted. "
+            "Trying backup key..."
+        )
+
+    # All keys failed
+    return {
+        "error": (
+            "AI service is currently busy. "
+            "Please try again later."
+        )
+    }

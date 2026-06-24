@@ -43,11 +43,15 @@ export default function UploadZone() {
         type: "application/pdf",
       } as any);
 
-      const res = await fetch("https://mahima4569-synapse-backend.hf.upload", {
-        method: "POST",
-        headers: { Authorization: `Bearer ${token}` },
-        body: formData,
-      });
+
+   const res = await fetch(
+  "https://mahima4569-synapse-backend.hf.space/ai/upload-images",
+  {
+    method: "POST",
+    headers: { Authorization: `Bearer ${token}` },
+    body: formData,
+  }
+);
 
       const data = await res.json();
       if (res.ok) setSummary(data.summary);
