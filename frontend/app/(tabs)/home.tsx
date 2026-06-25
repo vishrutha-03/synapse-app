@@ -49,7 +49,7 @@ export default function Home() {
 
         <StreakBanner
           streakDays={activeStreak}
-          bestDays={activeStreak > 21 ? activeStreak : 21}
+          bestDays={activeStreak > 21 ? activeStreak : 3}
         />
 
         <View style={styles.sectionRow}>

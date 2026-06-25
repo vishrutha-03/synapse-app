@@ -23,10 +23,8 @@ export default function Upload() {
   // ✅ METHODS inside component so Colors is the live themed value
   const METHODS = useMemo(
     () => [
-      { icon: "📄", label: "PDF Slides", color: Colors.yellow },
-      { icon: "🖼️", label: "Image Scan", color: Colors.purple },
+      { icon: "📄", label: "Image/PDF Scan", color: Colors.yellow },
       { icon: "📝", label: "Text Paste", color: Colors.primary },
-      { icon: "🔗", label: "URL Import", color: Colors.secondary },
     ],
     [darkMode]
   );
