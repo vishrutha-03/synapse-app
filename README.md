@@ -1,50 +1,86 @@
-# Welcome to your Expo app 👋
+# Synapse
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+Synapse is an AI-powered study companion for BMS College of Engineering students. It turns pasted notes and uploaded study material into concise summaries and flashcard decks, then helps learners review them through quizzes while tracking progress and study streaks.
 
-## Get started
+## Features
 
-1. Install dependencies
+- BMSCE email sign-up with email OTP verification and JWT-based authentication
+- AI-generated summaries and five question-and-answer flashcards from text
+- OCR-powered image/document processing with EasyOCR
+- Create, rename, edit, and delete decks and individual flashcards
+- Flashcard and quiz review experiences with study-session analytics, accuracy, and streak tracking
+- Light and dark themes across Android, iOS, and web
 
-   ```bash
-   npm install
-   ```
+## Tech stack
 
-2. Start the app
+| Layer | Technology |
+| --- | --- |
+| Client | Expo, React Native, Expo Router, TypeScript, Zustand |
+| API | FastAPI, Uvicorn, JWT, Motor |
+| Data | MongoDB |
+| AI & OCR | Google Gemini 2.5 Flash, EasyOCR |
+| Email | Brevo transactional email |
 
-   ```bash
-   npx expo start
-   ```
+## Project structure
 
-In the output, you'll find options to open the app in a
-
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
-
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
-
-## Get a fresh project
-
-When you're ready, run:
-
-```bash
-npm run reset-project
+```text
+frontend/  Expo application and UI components
+backend/   FastAPI service, MongoDB models, AI and email integrations
 ```
 
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
+## Run locally
 
-## Learn more
+### Backend
 
-To learn more about developing your project with Expo, look at the following resources:
+Requires Python 3.11+ and a running MongoDB instance.
 
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
+```powershell
+cd backend
+python -m venv .venv
+.\.venv\Scripts\Activate.ps1
+pip install -r requirements.txt
+uvicorn app.main:app --reload
+```
 
-## Join the community
+Create `backend/.env` with your service credentials:
 
-Join our community of developers creating universal apps.
+```env
+MONGODB_URI=mongodb://localhost:27017
+GEMINI_API_KEY=your_gemini_key
+GEMINI_API_KEY2=your_optional_backup_gemini_key
+BREVO_API_KEY=your_brevo_key
+```
 
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+The API will be available at `http://127.0.0.1:8000`, with interactive endpoint documentation at `/docs`.
+
+### Frontend
+
+Requires Node.js and npm.
+
+```powershell
+cd frontend
+npm install
+npx expo start
+```
+
+Use the Expo prompt to launch Android, iOS, or the web client. The app currently points to the deployed Synapse API; when working against a local backend, update the API URLs in the frontend to your reachable development-server address (use your machine's LAN IP for a physical device).
+
+## API overview
+
+- `POST /auth/signup`, `POST /auth/login` - account registration and sign-in
+- `POST /otp/send`, `POST /otp/verify` - BMSCE email verification
+- `POST /upload` - generate study material from pasted text or uploaded content
+- `POST /ai/upload-images` - OCR an uploaded image and generate study material
+- `GET|POST /decks/` and `GET|PATCH|DELETE /decks/{deck_id}` - deck management
+- `PATCH|DELETE /decks/{deck_id}/cards/{card_id}` - flashcard management
+- `GET /users/me/`, `POST /users/study-logs/` - learner analytics and review tracking
+
+Most study and deck endpoints require an `Authorization: Bearer <token>` header.
+
+## Deployment
+
+The backend includes a Dockerfile configured to serve FastAPI on port `7860`, suitable for container-based deployments such as Hugging Face Spaces.
+
+## Security note
+
+Keep `.env` files and API keys out of source control. Before deploying beyond a development environment, replace the hard-coded JWT secret and restrict CORS origins.
